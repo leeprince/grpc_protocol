@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package helloctl;
+
+option go_package = ".;helloctl";
+
+// 引入依赖文件。`protoc 命令中指定 -I 作为根目录`
+import "protos/helloctl/hello.proto";
+
+service HelloCtl {
+    rpc SayHello(SayHelloReq) returns (SayHelloResp) {};
+}

@@ -1,0 +1,74 @@
+# Makefile: 一个工程中的源文件不计其数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile就像一个Shell脚本一样，也可以执行操作系统的命令
+
+# --- `protos`下级文件名的作为生成包名
+package_name="helloctl"
+# --- `protos`下级文件名的作为生成包名-end
+
+
+out_package_name := $(strip $(subst -,, $(package_name)))
+proto_file := $(wildcard proto/$(package_name)/*.proto)
+go_out := ${PWD}/grpc/$(out_package_name)
+php_out := ${PWD}/grpc_php/$(out_package_name)
+ARCH="`uname -s`"
+
+.PHONY: go tools clean php
+go:
+	@echo "[INFO] input  package name: $(package_name)"
+	@echo "[INFO] output package name: $(out_package_name)"
+	@rm -rf $(go_out)
+	@mkdir -p $(go_out)
+
+	@echo $(go_out)
+	@echo "[INFO] compiling"
+	@protoc \
+	-I proto \
+	-I vendors \
+	--go_out=$(go_out) \
+	--go-grpc_opt=require_unimplemented_servers=false \
+	--go-grpc_out=$(go_out) \
+	--grpc-gateway_out=$(go_out) \
+	--grpc-gateway_opt=logtostderr=true \
+	--grpc-gateway_opt=paths=source_relative \
+	$(proto_file)
+
+	@echo "[INFO] move or delete useless directory..."
+	@bash script/mvdefine.sh $(package_name) $(go_out)
+	@mv $(go_out)/$(package_name)/*.pb.gw.go $(go_out)
+	@rm -rf $(go_out)/$(package_name)
+	@echo "[INFO] compilation done"
+
+php:
+	@echo "[INFO] input  package name: $(package_name)"
+	@echo "[INFO] output package name: $(out_package_name)"
+	@mkdir -p $(php_out)
+
+	@echo "[INFO] compiling"
+	@protoc \
+	-I proto \
+	-I vendors \
+	--php_out=$(php_out) \
+	$(proto_file)
+
+	@echo "[INFO] compilation done"
+
+doc:
+	@echo "[INFO] input  package name: $(package_name)"
+	@echo "[INFO] output package name: $(out_package_name)"
+	@protoc -I proto \
+	 -I vendors \
+     --openapiv2_out=proto/$(package_name) \
+     --openapiv2_opt logtostderr=true \
+	 --openapiv2_opt json_names_for_fields=false  \
+	$(proto_file)
+	@sed -i s/title/description/  proto/$(package_name)/$(package_name)/*.json
+	@echo "[INFO] doc done"
+tools:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway@latest
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
+
+clean:
+	-rm -rf $(go_out) 
+	-rm -rf $(php_out) 
+	@echo "[INFO] clean done"

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// 生成的package名称:可以向.proto文件添加可选的包说明符，以防止协议消息类型之间的名称冲突
+//  - 包说明符影响生成代码的方式取决于您选择的语言.如：go_package、java_package、
+package helloctlgateway;
+
+// option go_package = "{path};{go package名称}";
+//  - path:会自动生成
+option go_package = "./;helloctlgateway";
+
+message SayHelloReq {
+    string name = 1; // 姓名
+    int32 age = 2; // 年龄
+}
+message SayHelloResp {
+    int32 code = 1; // 状态码。0成功；非0失败
+    string message = 2; // 状态码说明
+    string log_id = 3;  // 日志ID
+    SayHelloRespData data = 4; // 数据
+}
+message SayHelloRespData {
+    int32 access_time = 1; // 访问时间
+}

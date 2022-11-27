@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package helloctlgateway;
+
+// 注意
+option go_package = "./;helloctlgateway";
+
+import "google/api/annotations.proto";
+
+// 引入依赖文件。`protoc 命令中指定 -I 作为proto源文件`
+import "protos/helloctlgateway/hello.proto";
+
+service HelloCtl {
+    rpc SayHello(SayHelloReq) returns (SayHelloResp) {
+        option (google.api.http) = {
+            post:"/helloctlgateway/sayhello"
+            body:"*"
+        };
+    };
+}
