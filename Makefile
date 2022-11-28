@@ -24,8 +24,14 @@ php_out := ${PWD}/grpc_php/$(out_package_name)
 #	--go_out:在指定目录生成Go代码
 #	–go_opt paths=source_relative:表示按源文件的目录组织输出,也就是" the same relative directory "。
 #	关于XXX_opt 中 paths 有两个参数
-#		- import(默认): 按照option go_package里面的那个路径生成
+#		- import(默认): 按照`option go_package="{path};{go package名称}"`里面的那个路径{path}生成
 #		- source_relative：表示按源文件的目录组织输出。这意味着,会将proto文件相对proto_path(-I)指定的基目录,按同样的目录组织在`--go_out/--go-grpc_out/--grpc-gateway_out`上重放一遍
+# 指定生成grpc gateway 依赖的包`-I vendors`
+
+# .PHONY
+#	- .PHONY是一个伪目标，Makefile中将.PHONY放在一个目标前就是指明这个目标是伪文件目标。
+#	- 其作用就是防止在Makefile中定义的执行命令的目标和工作目录下的实际文件出现名字冲突。
+# 如果Make命令运行时没有指定目标，默认会执行Makefile文件的第一个目标。
 .PHONY: go_grpc go_grpc_gateway
 go_grpc:
 	@echo "[INFO] input  package name: $(package_name)"
@@ -45,8 +51,7 @@ go_grpc:
 
 	@echo "[INFO] compilation done"
 
-# 指定生成grpc gateway 依赖的包`-I vendors`
-go_grpc_gateway:
+go_grpc-gateway:
 	@echo "[INFO] input  package name: $(package_name)"
 	@echo "[INFO] output package name: $(out_package_name)"
 	@echo "[INFO] go_out: $(go_out)"
@@ -66,3 +71,5 @@ go_grpc_gateway:
 	$(proto_file)
 
 	@echo "[INFO] compilation done"
+
+

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package helloctl;
 
+// option go_package = "{path};{go package名称}";
+//  - path:会自动生成
 option go_package = ".;helloctl";
 
 // 引入依赖文件。`protoc 命令中指定 -I 作为根目录`

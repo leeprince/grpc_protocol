@@ -4,8 +4,6 @@ syntax = "proto3";
 //  - 包说明符影响生成代码的方式取决于您选择的语言.如：go_package、java_package、
 package helloctlgateway;
 
-// option go_package = "{path};{go package名称}";
-//  - path:会自动生成
 option go_package = "./;helloctlgateway";
 
 message SayHelloReq {
