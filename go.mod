@@ -1,4 +1,4 @@
-module leeprince/grpc_protocol
+module github.com/leeprince/gprc_protocol
 
 go 1.18
 
