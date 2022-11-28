@@ -1,0 +1,80 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "protos/helloctl/helloctl_services.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "HelloCtl"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "helloctlSayHelloResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "title": "状态码。0成功；非0失败"
+        },
+        "message": {
+          "type": "string",
+          "title": "状态码说明"
+        },
+        "log_id": {
+          "type": "string",
+          "title": "日志ID"
+        },
+        "data": {
+          "$ref": "#/definitions/helloctlSayHelloRespData",
+          "title": "数据"
+        }
+      }
+    },
+    "helloctlSayHelloRespData": {
+      "type": "object",
+      "properties": {
+        "access_time": {
+          "type": "integer",
+          "format": "int32",
+          "title": "访问时间"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

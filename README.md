@@ -11,19 +11,18 @@
 - 在服务器端，服务器实现此接口并运行gRPC服务器来处理客户端调用。
 - 在客户端，客户端有一个存根（stub）（在某些语言中仅称为客户端），它提供与服务器相同的方法。
 
-[gprc架构图](./doc/images/grpc.svg)
+![gprc架构图](./doc/images/grpc.svg)
 
 gRPC客户端和服务器可以在各种环境（从Google内部的服务器到您自己的桌面）中运行和相互通信，并且可以用gRPC支持的任何语言编写。
 因此，例如，您可以轻松地用Java创建一个gRPC服务器，而客户端使用Go、Python或Ruby。
 此外，最新的GoogleAPI将具有其接口的gRPC版本，使您可以轻松地将Google功能构建到应用程序中。
 
 ## （二）Protocol Buffers协议
-默认情况下，gRPC使用Protocol Buffers协议（简称pb协议），这是Google成熟的开源机制，用于序列化结构化数据（尽管它可以用于其他数据格式，如JSON）。
+默认情况下，gRPC使用Protocol Buffers协议（简称pb协议），这是Google成熟的开源机制，用于**序列化结构化数据**（尽管它可以用于其他数据格式，如JSON）。
 
 使用协议缓冲区时，第一步是定义要在proto文件中序列化的数据的结构：这是一个扩展名为.proto普通文本文件。
 
 协议缓冲区数据的结构为消息，其中每个消息都是一个小的信息逻辑记录，包含一系列名值对（称为字段）。
-
 
 ## （三）gRPC Go
 > 参考: https://grpc.io/docs/languages/go/quickstart/
@@ -111,6 +110,10 @@ $ go install \
 ### 1. gRPC Go gateway protoc编译器插件
 请看`一、gRPC` -> `（四）gRPC Go gateway` -> `1. 安装gRPC Go gateway protoc编译器插件`
 
+## （四）protobuf协议（Protocol Buffers）应存放的位置
+1. 【推荐】放到公共仓库（github、gitlab）中
+2. 放到$(GOPATH)
+3. 放到当前项目中
 
 # Makefile
 一个工程中的源文件不计其数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile就像一个Shell脚本一样，也可以执行操作系统的命令

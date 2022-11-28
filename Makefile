@@ -19,13 +19,14 @@ go_out := ${PWD}/grpc_go/$(out_package_name)
 # 在指定目录生成grpc protocol buffers的php代码(生成序列化/反序列化和gRPC客户端/服务器代码)路径
 php_out := ${PWD}/grpc_php/$(out_package_name)
 
+# 根据proto定义生成API文档
+proto_doc_out := ${PWD}/apidoc/$(out_package_name)
+
 # .PHONY
 #	- .PHONY是一个伪目标，Makefile中将.PHONY放在一个目标前就是指明这个目标是伪文件目标。
 #	- 其作用就是防止在Makefile中定义的执行命令的目标和工作目录下的实际文件出现名字冲突。
 # 如果Make命令运行时没有指定目标，默认会执行Makefile文件的第一个目标。
 .PHONY: go_grpc
-
-# protoc生成grpc gateway的依赖包`-I vendors`
 
 # protoc 命令参数说明
 #	-I:指定要在其中搜索的目录;可以多次指定,且按顺序搜索目录;如果未指定则为当前工作目录
@@ -44,7 +45,8 @@ go_grpc:
 	@rm -rf $(go_out)
 	@mkdir -p $(go_out)
 
-	@echo "[INFO] compiling"
+	@echo "[INFO] compiling..."
+
 	@protoc \
 	-I . \
 	-I vendors \
@@ -55,10 +57,52 @@ go_grpc:
 	--grpc-gateway_opt logtostderr=true \
 	$(proto_file)
 
-	@echo "[INFO] compilation done"
+	@echo "[INFO] compiling done"
+
+php_grpc:
+	@echo "[INFO] input  package name: $(package_name)"
+	@echo "[INFO] output package name: $(out_package_name)"
+
+	@echo "[INFO] php_out: $(php_out)"
+
+	@rm -rf $(php_out)
+	@mkdir -p $(php_out)
+
+	@echo "[INFO] compiling..."
+
+	@protoc \
+	-I . \
+	-I vendors \
+	--php_out=$(php_out) \
+	$(proto_file)
+
+	@echo "[INFO] compiling done"
+
+proto_doc:
+	@echo "[INFO] input  package name: $(package_name)"
+	@echo "[INFO] output package name: $(out_package_name)"
+
+	@echo "[INFO] proto_doc_out: $(proto_doc_out)"
+
+	@rm -rf $(proto_doc_out)
+	@mkdir -p $(proto_doc_out)
+
+	@echo "[INFO] generating..."
+
+	@protoc \
+	-I . \
+	-I vendors \
+    --openapiv2_out=$(proto_doc_out) \
+    --openapiv2_opt logtostderr=true \
+	--openapiv2_opt json_names_for_fields=false  \
+	$(proto_file)
+
+	@echo "[INFO] generating done"
 
 # makefile中所有脚本依赖的工具
 tools:
+	@echo "[INFO] installation..."
+
 	# gRPC Go protoc编译器插件
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -67,10 +111,14 @@ tools:
 	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest
 	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 
+	@echo "[INFO] installation done"
+
 # 清楚当前包输出的gRPC文件
 clean:
+	@echo "[INFO] cleaning..."
+
 	-rm -rf $(go_out)
 	-rm -rf $(php_out)
-	@echo "[INFO] clean done"
+	@echo "[INFO] cleaning done"
 
 
