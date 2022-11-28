@@ -17,5 +17,5 @@ message SayHelloResp {
     SayHelloRespData data = 4; // 数据
 }
 message SayHelloRespData {
-    int32 access_time = 1; // 访问时间
+    int64 access_time = 1; // 访问时间
 }

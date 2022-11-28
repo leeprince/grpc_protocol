@@ -4,7 +4,7 @@
 # 无http网关
 package_name := helloctl
 # 有http网关
-# package_name := helloctlgateway
+package_name := helloctlgateway
 # --- `protos`下级文件名的作为生成包名-end
 
 # subst 函数用来文本替换，格式`$(subst from,to,text)`
