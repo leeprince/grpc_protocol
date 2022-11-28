@@ -1,4 +1,5 @@
 # 生成 grpc 的 protocol buffer 协议的工具，及个人测试使用的公共包
+// TODO: 1.安装命令。2.初始化go仓库。3.废弃https://github.com/leeprince/protobuf项目 - prince@todo 2022/11/28 上午11:22
 ---
 
 # 一、gRPC
