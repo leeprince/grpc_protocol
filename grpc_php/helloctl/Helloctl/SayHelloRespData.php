@@ -16,7 +16,7 @@ class SayHelloRespData extends \Google\Protobuf\Internal\Message
     /**
      * 访问时间
      *
-     * Generated from protobuf field <code>int32 access_time = 1;</code>
+     * Generated from protobuf field <code>int64 access_time = 1;</code>
      */
     protected $access_time = 0;
 
@@ -26,7 +26,7 @@ class SayHelloRespData extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type int $access_time
+     *     @type int|string $access_time
      *           访问时间
      * }
      */
@@ -38,8 +38,8 @@ class SayHelloRespData extends \Google\Protobuf\Internal\Message
     /**
      * 访问时间
      *
-     * Generated from protobuf field <code>int32 access_time = 1;</code>
-     * @return int
+     * Generated from protobuf field <code>int64 access_time = 1;</code>
+     * @return int|string
      */
     public function getAccessTime()
     {
@@ -49,13 +49,13 @@ class SayHelloRespData extends \Google\Protobuf\Internal\Message
     /**
      * 访问时间
      *
-     * Generated from protobuf field <code>int32 access_time = 1;</code>
-     * @param int $var
+     * Generated from protobuf field <code>int64 access_time = 1;</code>
+     * @param int|string $var
      * @return $this
      */
     public function setAccessTime($var)
     {
-        GPBUtil::checkInt32($var);
+        GPBUtil::checkInt64($var);
         $this->access_time = $var;
 
         return $this;

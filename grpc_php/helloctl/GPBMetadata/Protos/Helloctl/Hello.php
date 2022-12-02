@@ -27,7 +27,7 @@ class Hello
 log_id (	(
 data (2.helloctl.SayHelloRespData"\'
 SayHelloRespData
-access_time (BZ
+access_time (BZ
 .;helloctlbproto3'
         , true);
 

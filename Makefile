@@ -4,7 +4,7 @@
 # 无http网关
 package_name := helloctl
 # 有http网关
-package_name := helloctlgateway
+#package_name := helloctlgateway
 # --- `protos`下级文件名的作为生成包名-end
 
 # subst 函数用来文本替换，格式`$(subst from,to,text)`
@@ -26,7 +26,7 @@ proto_doc_out := ${PWD}/apidoc/$(out_package_name)
 #	- .PHONY是一个伪目标，Makefile中将.PHONY放在一个目标前就是指明这个目标是伪文件目标。
 #	- 其作用就是防止在Makefile中定义的执行命令的目标和工作目录下的实际文件出现名字冲突。
 # 如果Make命令运行时没有指定目标，默认会执行Makefile文件的第一个目标。
-.PHONY: go_grpc
+.PHONY: go_grpc php_grpc
 
 # protoc 命令参数说明
 #	-I:指定要在其中搜索的目录;可以多次指定,且按顺序搜索目录;如果未指定则为当前工作目录
@@ -59,6 +59,10 @@ go_grpc:
 
 	@echo "[INFO] compiling done"
 
+# 生成GRPC的php客户端
+# 	--grpc_out=$(php_out)
+# 生成GRPC的php服务端和客户端
+# --grpc_out=generate_server:$(php_out)
 php_grpc:
 	@echo "[INFO] input  package name: $(package_name)"
 	@echo "[INFO] output package name: $(out_package_name)"
@@ -72,8 +76,9 @@ php_grpc:
 
 	@protoc \
 	-I . \
-	-I vendors \
 	--php_out=$(php_out) \
+	--grpc_out=generate_server:$(php_out) \
+	--plugin=protoc-gen-grpc=./bin/grpc_php_plugin \
 	$(proto_file)
 
 	@echo "[INFO] compiling done"

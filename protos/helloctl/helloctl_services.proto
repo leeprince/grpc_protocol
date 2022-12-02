@@ -10,5 +10,6 @@ option go_package = ".;helloctl";
 import "protos/helloctl/hello.proto";
 
 service HelloCtl {
+    // 说Hello
     rpc SayHello(SayHelloReq) returns (SayHelloResp) {};
 }
