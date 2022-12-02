@@ -72,7 +72,6 @@ go mod vendor
 go build -mod=vendor
 ```
 
-
 ## （四）gRPC Go gateway
 > 参考：https://github.com/grpc-ecosystem/grpc-gateway
 ### 1. 安装gRPC Go gateway protoc编译器插件
@@ -90,8 +89,13 @@ $ go install \
     protoc-gen-openapiv2
     protoc-gen-go
     protoc-gen-go-grpc
-```     
+```
 
+## （五）micro v3 相关包
+> https://github.com/go-micro/go-micro/
+```
+go get github.com/asim/go-micro/cmd/protoc-gen-micro/v3
+```
 
 # 二、生成协议缓冲区（Protocol Buffers）协议的protoc工具
 
@@ -115,7 +119,43 @@ $ go install \
 2. 放到$(GOPATH)
 3. 放到当前项目中
 
-# Makefile
+# 三、Makefile
 一个工程中的源文件不计其数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile就像一个Shell脚本一样，也可以执行操作系统的命令
 
-# 使用
+# 四、目录结构说明
+```
+.
+├── Makefile # Makefile 文件
+├── README.md # 项目必读手册
+├── apidoc # Makefile 文件中`proto_doc`命令生成的协议文档
+├── bin # 所有的可执行文件。注：大部分命令安装在操作系统中，未直接使用该路径下的可执行文件
+├── doc # 文档相关资源
+├── go.mod # golang的包管理
+├── go.sum # golang的包校验
+├── grpc_go # Makefile 文件中`go_grpc`命令生成的golang gRPC协议文档
+│   ├── helloctl # 生成的指定包名
+│   └── helloctlgateway # 生成的指定包名
+│       ├── hello.pb.go # 通过`protoc-gen-go`插件生成
+│       ├── service_helloctlgateway.pb.go # 通过`protoc-gen-go`插件生成
+│       ├── service_helloctlgateway.pb.gw.go # 通过`protoc-gen-grpc-gateway`插件生成
+│       └── service_helloctlgateway_grpc.pb.go # 通过`protoc-gen-go-grpc`插件生成
+├── grpc_php # Makefile 文件中`php_grpc`命令生成的php gRPC协议文档
+│   └── helloctl # 生成的指定包名
+│       ├── GPBMetadata # 生成一个对应包名的.php类文件，用于保存.proto的二进制元数据
+|       └── Helloctl
+|           ├── HelloCtlClient.php # php gRPC客户端类
+|           ├── HelloCtlStub.php # php gRPC服务端类
+|           ├── SayHelloReq.php # php gRPC的请求体类
+|           ├── SayHelloResp.php # php gRPC的响应体类
+|           └── SayHelloRespData.php # php gRPC的响应体的数据类
+├── protos # .proto 文件定义目录
+│   ├── helloctl # 包/命名空间
+│   │   ├── _helloctl.proto # 定义 rpc 的.proto文件
+│   │   └── hello.proto # 定义请求、响应的消息体结构的.proto文件
+│   └── helloctlgateway # 包/命名空间。包含网关层，如golang的gPRC gateway
+│       ├── _helloctl.proto # 定义 rpc 的.proto文件
+│       └── hello.proto # 定义请求、响应的消息体结构的.proto文件
+└── vendors # protoc 命令依赖的包
+```
+
+# 五、使用

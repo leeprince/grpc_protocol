@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.17.3
-// source: protos/helloctlgateway/helloctl_services.proto
+// source: protos/helloctl/service_helloctl.proto
 
-package helloctlgateway
+package helloctl
 
 import (
 	context "context"
@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HelloCtlClient interface {
+	// 说Hello
 	SayHello(ctx context.Context, in *SayHelloReq, opts ...grpc.CallOption) (*SayHelloResp, error)
 }
 
@@ -35,7 +36,7 @@ func NewHelloCtlClient(cc grpc.ClientConnInterface) HelloCtlClient {
 
 func (c *helloCtlClient) SayHello(ctx context.Context, in *SayHelloReq, opts ...grpc.CallOption) (*SayHelloResp, error) {
 	out := new(SayHelloResp)
-	err := c.cc.Invoke(ctx, "/helloctlgateway.HelloCtl/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/helloctl.HelloCtl/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,6 +47,7 @@ func (c *helloCtlClient) SayHello(ctx context.Context, in *SayHelloReq, opts ...
 // All implementations should embed UnimplementedHelloCtlServer
 // for forward compatibility
 type HelloCtlServer interface {
+	// 说Hello
 	SayHello(context.Context, *SayHelloReq) (*SayHelloResp, error)
 }
 
@@ -78,7 +80,7 @@ func _HelloCtl_SayHello_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/helloctlgateway.HelloCtl/SayHello",
+		FullMethod: "/helloctl.HelloCtl/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(HelloCtlServer).SayHello(ctx, req.(*SayHelloReq))
@@ -90,7 +92,7 @@ func _HelloCtl_SayHello_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HelloCtl_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "helloctlgateway.HelloCtl",
+	ServiceName: "helloctl.HelloCtl",
 	HandlerType: (*HelloCtlServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -99,5 +101,5 @@ var HelloCtl_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protos/helloctlgateway/helloctl_services.proto",
+	Metadata: "protos/helloctl/service_helloctl.proto",
 }

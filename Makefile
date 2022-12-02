@@ -59,6 +59,7 @@ go_grpc:
 
 	@echo "[INFO] compiling done"
 
+# -I vendors: 为了兼容golang gRPC gateway 的定义，故保留
 # 生成GRPC的php客户端
 # 	--grpc_out=$(php_out)
 # 生成GRPC的php服务端和客户端
@@ -76,6 +77,7 @@ php_grpc:
 
 	@protoc \
 	-I . \
+	-I vendors \
 	--php_out=$(php_out) \
 	--grpc_out=generate_server:$(php_out) \
 	--plugin=protoc-gen-grpc=./bin/grpc_php_plugin \
@@ -104,7 +106,7 @@ proto_doc:
 
 	@echo "[INFO] generating done"
 
-# makefile中所有脚本依赖的工具
+# makefile中脚本依赖的所有工具
 tools:
 	@echo "[INFO] installation..."
 

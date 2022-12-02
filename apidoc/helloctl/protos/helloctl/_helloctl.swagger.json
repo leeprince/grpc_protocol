@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "protos/helloctl/helloctl_services.proto",
+    "title": "protos/helloctl/_helloctl.proto",
     "version": "version not set"
   },
   "tags": [
@@ -43,8 +43,8 @@
       "type": "object",
       "properties": {
         "access_time": {
-          "type": "integer",
-          "format": "int32",
+          "type": "string",
+          "format": "int64",
           "title": "访问时间"
         }
       }

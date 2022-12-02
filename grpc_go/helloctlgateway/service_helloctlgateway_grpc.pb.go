@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.17.3
-// source: protos/helloctl/helloctl_services.proto
+// source: protos/helloctlgateway/service_helloctlgateway.proto
 
-package helloctl
+package helloctlgateway
 
 import (
 	context "context"
@@ -35,7 +35,7 @@ func NewHelloCtlClient(cc grpc.ClientConnInterface) HelloCtlClient {
 
 func (c *helloCtlClient) SayHello(ctx context.Context, in *SayHelloReq, opts ...grpc.CallOption) (*SayHelloResp, error) {
 	out := new(SayHelloResp)
-	err := c.cc.Invoke(ctx, "/helloctl.HelloCtl/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/helloctlgateway.HelloCtl/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func _HelloCtl_SayHello_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/helloctl.HelloCtl/SayHello",
+		FullMethod: "/helloctlgateway.HelloCtl/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(HelloCtlServer).SayHello(ctx, req.(*SayHelloReq))
@@ -90,7 +90,7 @@ func _HelloCtl_SayHello_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HelloCtl_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "helloctl.HelloCtl",
+	ServiceName: "helloctlgateway.HelloCtl",
 	HandlerType: (*HelloCtlServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -99,5 +99,5 @@ var HelloCtl_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protos/helloctl/helloctl_services.proto",
+	Metadata: "protos/helloctlgateway/service_helloctlgateway.proto",
 }
