@@ -127,7 +127,7 @@ go get github.com/asim/go-micro/cmd/protoc-gen-micro/v3
 .
 ├── Makefile # Makefile 文件
 ├── README.md # 项目必读手册
-├── apidoc # Makefile 文件中`proto_doc`命令生成的协议文档
+├── pbapidoc # Makefile 文件中`pb_api_doc`命令生成的gRPC protobuff（protocol buffers）协议的文档
 ├── bin # 所有的可执行文件。注：大部分命令安装在操作系统中，未直接使用该路径下的可执行文件
 ├── doc # 文档相关资源
 ├── go.mod # golang的包管理
@@ -159,3 +159,42 @@ go get github.com/asim/go-micro/cmd/protoc-gen-micro/v3
 ```
 
 # 五、使用
+## （一）定义`.proto`文件
+### 1. cd 到Makefile 所在目录
+cd 到Makefile 所在目录中，当前Makefile所在目录为项目根目录
+
+### 2. 创建`项目名称`
+在 `protos` 目录下，根据项目创建`项目名称`
+
+> 项目名称的规则（参考：golang包名的定义）：去除所有非字母或者数字的字符，再转成全小写）目录
+
+### 3. 开始编写`.proto`
+> `service_{项目名称}.proto`为定义rpc服务的文件
+
+（1）定义`package`, 与`项目名称`一样
+（2）根据golang或php语言定义相关option
+    > golang: `// option go_package = "{path};{go package名称}"; - {path}:会自动生成`
+    > php: 暂时没用到
+（3）按照API设计，结合[proto语法](https://developers.google.cn/protocol-buffers/docs/proto3)编写`.proto`文件
+
+## （二）使用Makefile中定义的命令
+### 1. 生成golang 的gRPC protobuff（protocol buffers）协议
+```
+# 当前Makefile中默认的命令即为：go_grpc，所以直接执行：`make` 效果一样
+$ make go_grpc
+```
+
+### 2. 生成php 的gRPC protobuff（protocol buffers）协议
+```
+$ make php_grpc
+```
+
+### 3. 生成`.proto`中定义的gRPC protobuff（protocol buffers）协议的文档
+```
+$ make pb_api_doc
+```
+
+### 4. 安装生成gRPC protobuff（protocol buffers）协议所需的可执行文件工具
+```
+$ make tools
+```

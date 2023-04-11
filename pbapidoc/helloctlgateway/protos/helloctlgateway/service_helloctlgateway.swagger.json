@@ -1,0 +1,127 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "protos/helloctlgateway/service_helloctlgateway.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "HelloCtl"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/helloctlgateway/sayhello": {
+      "post": {
+        "operationId": "HelloCtl_SayHello",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/helloctlgatewaySayHelloResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/helloctlgatewaySayHelloReq"
+            }
+          }
+        ],
+        "tags": [
+          "HelloCtl"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "helloctlgatewaySayHelloReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "姓名"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "title": "年龄"
+        }
+      }
+    },
+    "helloctlgatewaySayHelloResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32",
+          "title": "状态码。0成功；非0失败"
+        },
+        "message": {
+          "type": "string",
+          "title": "状态码说明"
+        },
+        "log_id": {
+          "type": "string",
+          "title": "日志ID"
+        },
+        "data": {
+          "$ref": "#/definitions/helloctlgatewaySayHelloRespData",
+          "title": "数据"
+        }
+      }
+    },
+    "helloctlgatewaySayHelloRespData": {
+      "type": "object",
+      "properties": {
+        "access_time": {
+          "type": "string",
+          "format": "int64",
+          "title": "访问时间"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

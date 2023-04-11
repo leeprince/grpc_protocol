@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package helloctlgateway;
 
-// option go_package = "{path};{go package名称}";
-//  - path:会自动生成
+// option go_package = "{path};{go package名称}"; - {path}:会自动生成
 option go_package = "./;helloctlgateway";
 
 import "google/api/annotations.proto";

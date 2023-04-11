@@ -2,9 +2,9 @@
 
 # --- `protos`下级文件名的作为生成包名
 # 无http网关
-package_name := helloctl
+#package_name := helloctl
 # 有http网关
-#package_name := helloctlgateway
+package_name := helloctlgateway
 # --- `protos`下级文件名的作为生成包名-end
 
 # subst 函数用来文本替换，格式`$(subst from,to,text)`
@@ -20,7 +20,7 @@ go_out := ${PWD}/grpc_go/$(out_package_name)
 php_out := ${PWD}/grpc_php/$(out_package_name)
 
 # 根据proto定义生成API文档
-proto_doc_out := ${PWD}/apidoc/$(out_package_name)
+protobuff_api_doc_out := ${PWD}/pbapidoc/$(out_package_name)
 
 # .PHONY
 #	- .PHONY是一个伪目标，Makefile中将.PHONY放在一个目标前就是指明这个目标是伪文件目标。
@@ -28,15 +28,16 @@ proto_doc_out := ${PWD}/apidoc/$(out_package_name)
 # 如果Make命令运行时没有指定目标，默认会执行Makefile文件的第一个目标。
 .PHONY: go_grpc php_grpc
 
-# protoc 命令参数说明
-#	-I:指定要在其中搜索的目录;可以多次指定,且按顺序搜索目录;如果未指定则为当前工作目录
-#		-I .:`.`作为proto源文件的根目录。在xxx.proto中`import`其他proto文件时，使用该路径作为proto源文件根目录
-#		-I vendors:生成grpc gateway的依赖包目录
-#	--go_out:在指定目录生成Go代码
-#	–go_opt paths=source_relative:表示按源文件的目录组织输出,也就是" the same relative directory "。
-#	关于XXX_opt 中 paths 有两个参数
-#		- import(默认): 按照`option go_package="{path};{go package名称}"`里面的那个路径{path}生成
-#		- source_relative：表示按源文件的目录组织输出。这意味着,会将proto文件相对proto_path(-I)指定的基目录,按同样的目录组织在`--go_out/--go-grpc_out/--grpc-gateway_out`上重放一遍
+# 生成golang 的gRPC protobuff（protocol buffers）协议
+#	 protoc 命令参数说明
+#		-I:指定要在其中搜索的目录;可以多次指定,且按顺序搜索目录;如果未指定则为当前工作目录
+#			-I .:`.`作为proto源文件的根目录。在xxx.proto中`import`其他proto文件时，使用该路径作为proto源文件根目录
+#			-I vendors:生成grpc gateway的依赖包目录
+#		--go_out:在指定目录生成Go代码
+#		–go_opt paths=source_relative:表示按源文件的目录组织输出,也就是" the same relative directory "。
+#		关于XXX_opt 中 paths 有两个参数
+#			- import(默认): 按照`option go_package="{path};{go package名称}"`里面的那个路径{path}生成
+#			- source_relative：表示按源文件的目录组织输出。这意味着,会将proto文件相对proto_path(-I)指定的基目录,按同样的目录组织在`--go_out/--go-grpc_out/--grpc-gateway_out`上重放一遍
 go_grpc:
 	@echo "[INFO] input  package name: $(package_name)"
 	@echo "[INFO] output package name: $(out_package_name)"
@@ -59,11 +60,12 @@ go_grpc:
 
 	@echo "[INFO] compiling done"
 
-# -I vendors: 为了兼容golang gRPC gateway 的定义，故保留
-# 生成GRPC的php客户端
-# 	--grpc_out=$(php_out)
-# 生成GRPC的php服务端和客户端
-# --grpc_out=generate_server:$(php_out)
+# 生成php 的gRPC protobuff（protocol buffers）协议
+# 	-I vendors: 为了兼容golang gRPC gateway 的定义，故保留
+# 	生成GRPC的php客户端
+# 		--grpc_out=$(php_out)
+# 	生成GRPC的php服务端和客户端
+# 	--grpc_out=generate_server:$(php_out)
 php_grpc:
 	@echo "[INFO] input  package name: $(package_name)"
 	@echo "[INFO] output package name: $(out_package_name)"
@@ -85,28 +87,29 @@ php_grpc:
 
 	@echo "[INFO] compiling done"
 
-proto_doc:
+# 生成`.proto`中定义的gRPC protobuff（protocol buffers）协议的文档
+pb_api_doc:
 	@echo "[INFO] input  package name: $(package_name)"
 	@echo "[INFO] output package name: $(out_package_name)"
 
-	@echo "[INFO] proto_doc_out: $(proto_doc_out)"
+	@echo "[INFO] proto_doc_out: $(protobuff_api_doc_out)"
 
-	@rm -rf $(proto_doc_out)
-	@mkdir -p $(proto_doc_out)
+	@rm -rf $(protobuff_api_doc_out)
+	@mkdir -p $(protobuff_api_doc_out)
 
 	@echo "[INFO] generating..."
 
 	@protoc \
 	-I . \
 	-I vendors \
-    --openapiv2_out=$(proto_doc_out) \
+    --openapiv2_out=$(protobuff_api_doc_out) \
     --openapiv2_opt logtostderr=true \
 	--openapiv2_opt json_names_for_fields=false  \
 	$(proto_file)
 
 	@echo "[INFO] generating done"
 
-# makefile中脚本依赖的所有工具
+# 安装生成gRPC protobuff（protocol buffers）协议所需的可执行文件工具
 tools:
 	@echo "[INFO] installation..."
 
@@ -120,7 +123,7 @@ tools:
 
 	@echo "[INFO] installation done"
 
-# 清楚当前包输出的gRPC文件
+# 删除当前包输出的gRPC protobuff（protocol buffers）协议
 clean:
 	@echo "[INFO] cleaning..."
 

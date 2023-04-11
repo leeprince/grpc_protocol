@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "protos/helloctl/_helloctl.proto",
+    "title": "protos/helloctl/service_helloctl.proto",
     "version": "version not set"
   },
   "tags": [
